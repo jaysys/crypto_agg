@@ -3,12 +3,6 @@
 [2025-02-01 22:45:04] 업데이트 완료. 3분 대기중...
 [2025-02-01 22:48:08] 포트폴리오 업데이트 시작
 [2025-02-01 22:48:08] ./agg.py 실행중...
-2025-02-01 22:48:14,274 - INFO - Attempting to connect to https://api.mainnet-beta.solana.com
-2025-02-01 22:48:14,677 - INFO - HTTP Request: POST https://api.mainnet-beta.solana.com "HTTP/1.1 200 OK"
-2025-02-01 22:48:14,678 - INFO - Successfully connected to https://api.mainnet-beta.solana.com
-2025-02-01 22:48:14,721 - INFO - HTTP Request: POST https://api.mainnet-beta.solana.com "HTTP/1.1 200 OK"
-2025-02-01 22:48:14,722 - INFO - SOL Balance: 1.132280
-2025-02-01 22:48:15,044 - INFO - USDC Balance: 25.281683
   currency     balance        price           total                 date
 0      SOL      2.1323 350,050.0000  4,246,904.6501  2025-02-01 22:48:15
 1     USDC     25.2817   1,537.0000     38,857.9468  2025-02-01 22:48:15
