@@ -1,0 +1,25 @@
+# Exchange API Keys
+UPBIT_ACCESS_KEY="your_upbit_access_key"
+UPBIT_SECRET_KEY="your_upbit_secret_key"
+KORBIT_ACCESS_KEY="your_korbit_access_key"
+KORBIT_SECRET_KEY="your_korbit_secret_key"
+BITHUMB_ACCESS_KEY="your_bithumb_access_key"
+BITHUMB_SECRET_KEY="your_bithumb_secret_key"
+COINONE_ACCESS_KEY="your_coinone_access_key"
+COINONE_SECRET_KEY="your_coinone_secret_key"
+
+# solana wallet
+PHANTOM_SOLANA_ACCOUNT = "000000000abcdefYSTuWk1QMTD"
+
+# 보유수량을 수기로 작성해놓고 계산해보게 합니다.
+CRYPTO_VIRTUAL=41877.791
+CRYPTO_BTC=0.3777
+CRYPTO_SUI=6273.6343
+CRYPTO_SOL=13.3959
+CRYPTO_KRW=3463966.2733
+CRYPTO_ETH=0.0116
+CRYPTO_USDC=5.2817
+CRYPTO_AI16Z=0.4187
+CRYPTO_XRP=10.0
+CRYPTO_LINK=1.0
+CRYPTO_ADA=10.0
