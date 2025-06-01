@@ -423,7 +423,7 @@ from typing import Optional, Dict
 from datetime import datetime
 import pandas as pd
 from logging import getLogger
-from api_prices import PriceAPI
+from utils.price_fetcher import PriceAPI
 
 def get_df_report(sol_account=None, addresses: Optional[Dict[str, str]] = None) -> pd.DataFrame:
     """
