@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from dotenv import load_dotenv
-from api_solana_chain import get_df_report, BalanceResult, BalanceErrorCode
+from services.solana_chain_api import get_df_report, BalanceResult, BalanceErrorCode
 
 def main():
     load_dotenv()
