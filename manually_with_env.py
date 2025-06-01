@@ -19,7 +19,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from datetime import datetime
 
-import api_prices as prices 
+from utils import price_fetcher as prices
 
 @dataclass
 class CryptoHolding:
