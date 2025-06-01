@@ -152,26 +152,6 @@ def usage_example():
     
     api = BithumbAPI(ACCESS_KEY, SECRET_KEY)
     
-    # #Get price for USDC
-    # coin_price = api.get_price_by_currency('USDC')
-    # print("USDC:", coin_price)
-    # print("111111")
-
-    # #Get BTC account
-    # btc_account = api.get_balance_by_currency('BTC')
-    # pp.pprint(btc_account)
-    # print("211111")   
-    
-    # #Get BTC account
-    # FET_account = api.get_balance_by_currency('FET')
-    # pp.pprint(FET_account)
-    # print("311111")
-
-    # #Get multiple accounts
-    # accounts = api.get_balances(['KRW', 'BTC', 'VIRTUAL', 'FET'])
-    # pp.pprint(accounts)
-    # print("411111")
-    
     if 1:
         nonzero_accounts = api.get_nonzero_balances()
         nonzero_currencies = [account['currency'] for account in nonzero_accounts]

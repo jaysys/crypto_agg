@@ -1,7 +1,7 @@
-import api_bithumb as bi
-import api_coinone as co
-import api_korbit as ko
-import api_upbit as up
+from services import bithumb_api as bi
+from services import coinone_api as co
+from services import korbit_api as ko
+from services import upbit_api as up
 from dotenv import load_dotenv
 import os
 import pandas as pd

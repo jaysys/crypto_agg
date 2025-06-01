@@ -167,13 +167,6 @@ def sample_usage():
 
     api = KorbitAPI(CLIENT_ID, CLIENT_SECRET)
 
-    # btc_balance = api.get_balance_by_currency('btc')
-    # print("btc: ", btc_balance)
-    # import pprint as pp
-    # pp.pprint(api.get_balances(['btc', 'eth', 'xrp', 'krw']))
-    # pp.pprint(api.get_nonzero_balances())
-    # print(api.get_price_by_currency('btc'))
-
     print(f"Korbit Portfolio Report ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
     
     try:
