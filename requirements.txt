@@ -1,0 +1,6 @@
+python-dotenv
+pandas
+requests
+PyJWT
+solana
+solders
