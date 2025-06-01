@@ -1,105 +1,105 @@
-# Cryptocurrency Portfolio Aggregator
+# 암호화폐 포트폴리오 애그리게이터
 
-## Project Overview
+## 프로젝트 개요
 
-This project is a Python-based cryptocurrency portfolio aggregator. It gathers your cryptocurrency holdings from various Korean exchanges and a Solana Phantom wallet, determines their current value in KRW, and presents a consolidated report. It also offers a separate utility to track asset values based on manually entered quantities.
+이 프로젝트는 파이썬 기반의 암호화폐 포트폴리오 애그리게이터입니다. 여러 한국 거래소와 Solana Phantom 지갑의 암호화폐 보유량을 수집하고, 현재 KRW 기준 가치를 계산하여 통합 보고서를 제공합니다. 또한 수동으로 입력한 자산 수량을 기반으로 가치를 추적할 수 있는 유틸리티도 함께 제공합니다.
 
-## Features
+## 주요 기능
 
-*   **Multi-Exchange Support:** Aggregates balances from major Korean exchanges:
-    *   Bithumb
-    *   Coinone
-    *   Korbit
-    *   Upbit
-*   **Solana Wallet Integration:** Fetches SOL and SPL token balances from a specified Solana (Phantom) wallet address.
-*   **KRW Valuation:** Automatically fetches current KRW prices for all assets using a combination of direct exchange prices and a fallback mechanism querying multiple sources (including CoinGecko).
-*   **Consolidated Reporting:** Merges data from all sources into a unified Pandas DataFrame, showing individual assets, quantities, current prices, total values, and the exchange/source.
-*   **Manual Tracking:** Option to calculate portfolio value based on asset quantities manually defined in the environment settings (`manually_with_env.py`).
-*   **Automated Monitoring:** Includes a shell script (`monitoring.sh`) to run the aggregation periodically.
-*   **Modular Design:** Code is structured into `services` for API interactions and `utils` for shared utilities like price fetching.
+*   **다중 거래소 지원:** 주요 국내 거래소의 잔고를 통합 관리합니다:
+    *   빗썸
+    *   코인원
+    *   코빗
+    *   업비트
+*   **솔라나 지갑 통합:** 지정된 Solana(Phantom) 지갑 주소의 SOL 및 SPL 토큰 잔고를 조회합니다.
+*   **KRW 평가:** 거래소 가격과 CoinGecko를 포함한 여러 소스의 가격을 우선순위에 따라 조회하여 모든 자산의 현재 KRW 가치를 자동으로 계산합니다.
+*   **통합 보고서:** 모든 소스의 데이터를 Pandas DataFrame으로 통합하여 개별 자산, 수량, 현재가, 총액, 거래소/소스 정보를 한눈에 확인할 수 있습니다.
+*   **수동 추적:** 환경 설정(`manually_with_env.py`)에서 수동으로 정의한 자산 수량을 기반으로 포트폴리오 가치를 계산할 수 있습니다.
+*   **자동 모니터링:** 주기적으로 자산을 집계하는 셸 스크립트(`monitoring.sh`)를 포함하고 있습니다.
+*   **모듈화된 설계:** API 연동을 위한 `services`와 가격 조회와 같은 공통 유틸리티를 위한 `utils`로 코드가 구조화되어 있습니다.
 
-## Directory Structure
+## 디렉토리 구조
 
 ```
 .
-├── README.md                 # This documentation file
-├── agg.py                    # Main script for live portfolio aggregation
-├── manually_with_env.py      # Script for tracking manually entered holdings
-├── monitoring.sh             # Shell script for periodic execution of agg.py
-├── requirements.txt          # Python package dependencies
-├── .env                      # Environment variables (user must create this)
-├── services/                 # Modules for interacting with external services
+├── README.md                 # 이 문서
+├── agg.py                    # 실시간 포트폴리오 집계를 위한 메인 스크립트
+├── manually_with_env.py      # 수동으로 입력한 보유량을 추적하기 위한 스크립트
+├── monitoring.sh             # agg.py를 주기적으로 실행하는 셸 스크립트
+├── requirements.txt          # 파이썬 패키지 의존성
+├── .env                      # 환경 변수 (사용자가 생성해야 함)
+├── services/                 # 외부 서비스와 상호작용하기 위한 모듈
 │   ├── __init__.py
 │   ├── bithumb_api.py
 │   ├── coinone_api.py
 │   ├── korbit_api.py
 │   ├── solana_chain_api.py
 │   └── upbit_api.py
-└── utils/                    # Utility modules
+└── utils/                    # 유틸리티 모듈
     ├── __init__.py
     └── price_fetcher.py
 ```
-*(Note: `cex_agg.py` and `dex_sol_agg.py` also exist in the repository as per user request but are not part of the primary workflow described here.)*
+*(참고: `cex_agg.py`와 `dex_sol_agg.py`도 사용자 요청에 따라 저장소에 존재하지만, 여기서 설명하는 기본 워크플로우에는 포함되지 않습니다.)*
 
-## Core Functionality
+## 핵심 기능
 
-### 1. Live Portfolio Aggregation (`agg.py`)
+### 1. 실시간 포트폴리오 집계 (`agg.py`)
 
-This is the main script for tracking your live cryptocurrency portfolio.
-*   It initializes API clients for Bithumb, Coinone, Korbit, Upbit, and the Solana blockchain.
-*   It fetches balances for all assets held on these platforms.
-*   For Solana assets, it uses the `utils.price_fetcher.PriceAPI` to get KRW values. Exchange APIs typically provide KRW prices directly.
-*   All data is standardized and combined into a single report, showing:
-    *   Asset Name (e.g., BTC, SOL, USDC)
-    *   Quantity Held
-    *   Current Price (KRW)
-    *   Total Value (KRW)
-    *   Exchange/Source (e.g., Upbit, Phantom)
-    *   Timestamp of data retrieval
-*   The script also prints summaries of total portfolio value and holdings grouped by asset name and by exchange.
+실시간 암호화폐 포트폴리오를 추적하기 위한 메인 스크립트입니다.
+*   빗썸, 코인원, 코빗, 업비트, 솔라나 블록체인을 위한 API 클라이언트를 초기화합니다.
+*   이 플랫폼들에 보유한 모든 자산의 잔고를 조회합니다.
+*   솔라나 자산의 경우 KRW 가치를 얻기 위해 `utils.price_fetcher.PriceAPI`를 사용합니다. 거래소 API는 일반적으로 직접 KRW 가격을 제공합니다.
+*   모든 데이터는 표준화되어 단일 보고서로 결합되며, 다음 정보를 보여줍니다:
+    *   자산 이름 (예: BTC, SOL, USDC)
+    *   보유 수량
+    *   현재가 (KRW)
+    *   총액 (KRW)
+    *   거래소/소스 (예: 업비트, 팬텀)
+    *   데이터 조회 시각
+*   이 스크립트는 또한 자산 이름별 및 거래소별로 그룹화된 총 포트폴리오 가치와 보유량에 대한 요약도 출력합니다.
 
-### 2. Manual Portfolio Tracking (`manually_with_env.py`)
+### 2. 수동 포트폴리오 추적 (`manually_with_env.py`)
 
-This script allows you to calculate the value of a portfolio based on quantities you manually define in your `.env` file.
-*   It reads `CRYPTO_<SYMBOL>` variables from your `.env` file (e.g., `CRYPTO_BTC=1.5`).
-*   It uses `utils.price_fetcher.PriceAPI` to get the current KRW price for each defined asset.
-*   It then prints a report showing the value of these manually tracked holdings.
-*   **Note:** This script does *not* connect to exchanges or your live wallet; it only uses the quantities you specify in `.env`.
+`.env` 파일에 수동으로 정의한 수량을 기반으로 포트폴리오 가치를 계산할 수 있는 스크립트입니다.
+*   `.env` 파일에서 `CRYPTO_<심볼>` 변수를 읽어옵니다 (예: `CRYPTO_BTC=1.5`).
+*   `utils.price_fetcher.PriceAPI`를 사용하여 정의된 각 자산의 현재 KRW 가격을 가져옵니다.
+*   그런 다음 수동으로 추적되는 보유 자산의 가치를 보여주는 보고서를 출력합니다.
+*   **참고:** 이 스크립트는 거래소나 실제 지갑에 연결하지 않으며, `.env`에 지정한 수량만 사용합니다.
 
-### 3. Service Modules (`services/`)
+### 3. 서비스 모듈 (`services/`)
 
-This directory contains the Python modules responsible for communicating with each specific financial service:
-*   `bithumb_api.py`: Handles interactions with the Bithumb exchange API.
-*   `coinone_api.py`: Handles interactions with the Coinone exchange API.
-*   `korbit_api.py`: Handles interactions with the Korbit exchange API.
-*   `upbit_api.py`: Handles interactions with the Upbit exchange API.
-*   `solana_chain_api.py`: Handles interactions with the Solana blockchain via RPC to fetch wallet balances (SOL and SPL tokens). It utilizes `utils.price_fetcher.py` for token valuation.
+이 디렉토리에는 각 금융 서비스와 통신을 담당하는 파이썬 모듈이 포함되어 있습니다:
+*   `bithumb_api.py`: 빗썸 거래소 API와의 상호작용을 처리합니다.
+*   `coinone_api.py`: 코인원 거래소 API와의 상호작용을 처리합니다.
+*   `korbit_api.py`: 코빗 거래소 API와의 상호작용을 처리합니다.
+*   `upbit_api.py`: 업비트 거래소 API와의 상호작용을 처리합니다.
+*   `solana_chain_api.py`: RPC를 통해 솔라나 블록체인과 상호작용하여 지갑 잔고(SOL 및 SPL 토큰)를 가져옵니다. 토큰 평가를 위해 `utils.price_fetcher.py`를 활용합니다.
 
 Each module typically manages its own authentication, API request logic, and formats the retrieved data into a Pandas DataFrame.
 
-### 4. Utility Modules (`utils/`)
+### 4. 유틸리티 모듈 (`utils/`)
 
-*   `price_fetcher.py`: Contains the `PriceAPI` class. This utility is responsible for fetching the KRW price of a given cryptocurrency symbol. It queries Upbit, Bithumb, Coinone, and CoinGecko (as a fallback) in a prioritized manner to find the first available valid price.
+*   `price_fetcher.py`: `PriceAPI` 클래스를 포함하고 있습니다. 이 유틸리티는 주어진 암호화폐 심볼의 KRW 가격을 조회하는 역할을 합니다. 업비트, 빗썸, 코인원, 그리고 CoinGecko(대체 수단으로)에 우선순위에 따라 조회하여 사용 가능한 첫 번째 유효한 가격을 찾습니다.
 
-## Development Environment & Setup
+## 개발 환경 및 설정
 
-### Prerequisites
-*   Python 3 (e.g., Python 3.8+)
-*   Access to a shell environment (like bash) for running `.sh` scripts.
+### 필수 조건
+*   Python 3 (예: Python 3.8 이상)
+*   `.sh` 스크립트를 실행하기 위한 셸 환경(예: bash) 접근 권한
 
-### 1. Clone the Repository (if applicable)
+### 1. 저장소 복제 (해당하는 경우)
 ```bash
 git clone <repository_url>
 cd <repository_directory>
 ```
 
-### 2. Create `.env` File
-You **must** create a file named `.env` in the root directory of the project. This file stores your API keys and other sensitive configuration.
+### 2. `.env` 파일 생성
+프로젝트 루트 디렉토리에 반드시 `.env` 파일을 생성해야 합니다. 이 파일은 API 키와 기타 민감한 설정을 저장합니다.
 
-Copy the example below and replace the placeholder values with your actual credentials and information:
+아래 예시를 복사하고 자격 증명 및 정보로 플레이스홀더 값을 대체하세요:
 
 ```env
-# Exchange API Keys
+# 거래소 API 키
 UPBIT_ACCESS_KEY="your_upbit_access_key"
 UPBIT_SECRET_KEY="your_upbit_secret_key"
 
@@ -112,69 +112,69 @@ BITHUMB_SECRET_KEY="your_bithumb_secret_key"
 COINONE_ACCESS_KEY="your_coinone_access_key"
 COINONE_SECRET_KEY="your_coinone_secret_key"
 
-# Solana Phantom Wallet Address (or any Solana address)
+# 솔라나 팬텀 지갑 주소 (또는 솔라나 주소)
 PHANTOM_SOLANA_ACCOUNT="your_phantom_solana_wallet_address"
 
-# Optional: For manually_with_env.py - Manually Tracked Crypto Holdings
-# Define any assets you want to track manually using this format:
-# CRYPTO_SYMBOL=QUANTITY
-# Examples:
+# 선택사항: manually_with_env.py를 위한 수동 추적 암호화폐 보유량
+# 다음 형식으로 추적하려는 자산을 정의하세요:
+# CRYPTO_심볼=수량
+# 예시:
 # CRYPTO_BTC="1.5"
 # CRYPTO_ETH="10.25"
 # CRYPTO_USDC="1000"
 ```
-**Important:** Keep your `.env` file secure and do not commit it to version control. Add `.env` to your `.gitignore` file if it's not already there.
+**중요:** `.env` 파일을 안전하게 보관하고 버전 관리 시스템에 커밋하지 마세요. 아직 추가하지 않았다면 `.gitignore` 파일에 `.env`를 추가하세요.
 
-### 3. Install Dependencies
-The project uses several Python packages. You can install them using pip and the provided `requirements.txt` file.
+### 3. 의존성 설치
+이 프로젝트는 여러 파이썬 패키지를 사용합니다. 제공된 `requirements.txt` 파일을 사용하여 pip로 설치할 수 있습니다.
 
 ```bash
 pip install -r requirements.txt
 ```
-If `requirements.txt` is not yet available or you prefer manual installation for some reason, the core dependencies are:
+`requirements.txt`가 아직 없거나 수동으로 설치를 선호하는 경우, 핵심 의존성은 다음과 같습니다:
 ```bash
 pip install python-dotenv pandas requests PyJWT solana solders
 ```
 
-## How to Run
+## 실행 방법
 
-### 1. Live Portfolio Aggregation (`agg.py`)
-To run the main aggregation script and see your consolidated portfolio from exchanges and your Solana wallet:
+### 1. 실시간 포트폴리오 집계 (`agg.py`)
+거래소와 솔라나 지갑의 통합 포트폴리오를 확인하려면 메인 집계 스크립트를 실행하세요:
 ```bash
 python3 agg.py
 ```
-The script will output the results to the console.
+스크립트는 결과를 콘솔에 출력합니다.
 
-### 2. Automated Monitoring (`monitoring.sh`)
-The `monitoring.sh` script runs `agg.py` periodically (every 3 minutes by default).
-First, make the script executable:
+### 2. 자동 모니터링 (`monitoring.sh`)
+`monitoring.sh` 스크립트는 `agg.py`를 주기적으로 실행합니다(기본값: 3분마다).
+먼저 스크립트에 실행 권한을 부여하세요:
 ```bash
 chmod +x monitoring.sh
 ```
-Then, run it:
+그런 다음 실행하세요:
 ```bash
 ./monitoring.sh
 ```
-It will log its activity to the console. Press `Ctrl+C` to stop it.
+활동이 콘솔에 기록됩니다. 중지하려면 `Ctrl+C`를 누르세요.
 
-### 3. Manual Portfolio Tracking (`manually_with_env.py`)
-To calculate portfolio values based on quantities manually specified in your `.env` file:
+### 3. 수동 포트폴리오 추적 (`manually_with_env.py`)
+`.env` 파일에 수동으로 지정한 수량을 기반으로 포트폴리오 가치를 계산하려면:
 ```bash
 python3 manually_with_env.py
 ```
 
-## Key Packages Used
+## 사용된 주요 패키지
 
-*   **python-dotenv:** For loading environment variables from the `.env` file.
-*   **pandas:** For data manipulation and creating DataFrames to structure reports.
-*   **requests:** For making HTTP requests to external exchange APIs and RPC endpoints.
-*   **PyJWT:** For generating JSON Web Tokens, used for authentication with some exchanges (e.g., Bithumb).
-*   **solana:** The official Python client library for interacting with the Solana blockchain.
-*   **solders:** A companion library for `solana-py`, providing core Solana data structures and utilities.
+*   **python-dotenv:** `.env` 파일에서 환경 변수를 로드하기 위한 라이브러리입니다.
+*   **pandas:** 데이터 조작 및 보고서 구조화를 위한 DataFrame 생성을 위한 라이브러리입니다.
+*   **requests:** 외부 거래소 API 및 RPC 엔드포인트에 HTTP 요청을 보내기 위한 라이브러리입니다.
+*   **PyJWT:** 일부 거래소(예: 빗썸)와의 인증에 사용되는 JSON 웹 토큰 생성을 위한 라이브러리입니다.
+*   **solana:** 솔라나 블록체인과 상호작용하기 위한 공식 파이썬 클라이언트 라이브러리입니다.
+*   **solders:** `solana-py`를 위한 동반 라이브러리로, 핵심 솔라나 데이터 구조와 유틸리티를 제공합니다.
 
-## Function Call Relationship (`agg.py` Workflow)
+## 함수 호출 관계 (`agg.py` 워크플로우)
 
-The following diagram illustrates the typical call flow when `agg.py` is executed:
+다음 다이어그램은 `agg.py`가 실행될 때의 일반적인 호출 흐름을 보여줍니다:
 
 ```mermaid
 sequenceDiagram
@@ -188,17 +188,17 @@ sequenceDiagram
     participant SolanaChain as services.solana_chain_api
     participant PriceFetcher as utils.PriceAPI
 
-    User->>M: Executes python3 agg.py
+    User->>M: python3 agg.py 실행
     M->>M: load_dotenv()
-    M->>Bithumb: Create BithumbAPI()
-    M->>Coinone: Create CoinoneAPI()
-    M->>Korbit: Create KorbitAPI()
-    M->>Upbit: Create UpbitAPI()
-    M->>A: Create Aggregator(bithumb, coinone, korbit, upbit)
-    M->>A: get_report()
+    M->>Bithumb: BithumbAPI() 생성
+    M->>Coinone: CoinoneAPI() 생성
+    M->>Korbit: KorbitAPI() 생성
+    M->>Upbit: UpbitAPI() 생성
+    M->>A: Aggregator(bithumb, coinone, korbit, upbit) 생성
+    M->>A: get_report() 호출
 
     activate A
-    A->>Bithumb: get_report_with_nonzero_balances()
+    A->>Bithumb: get_report_with_nonzero_balances() 호출
     Bithumb-->>A: bithumb_df
     A->>Coinone: get_report_with_nonzero_balances()
     Coinone-->>A: coinone_df
